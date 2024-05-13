@@ -1,0 +1,8 @@
+
+enlace articulo:
+
+https://medium.com/@heri.zap1304/aprovecha-al-máximo-la-información-en-la-web-práctica-elweb-scraping-y-la-consulta-de-datos-05ad2b130801
+
+enlace a repositorio:
+
+https://github.com/herikZ13/Crawler.git
