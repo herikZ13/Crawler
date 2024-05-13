@@ -1,0 +1,39 @@
+name,description,query,id,parentId,isFolder
+"CONSULTAS ",,,0,,true
+CARGAR CSV,,"LOAD CSV WITH HEADERS FROM 'https://drive.google.com/uc?export=download&id=1-HDYh7TmSG8pUmhHq7HDCqcvYJsoEdtv' AS row
+MERGE (a:Articulo {
+    fecha: row.Fecha,
+    noticia: row.Noticia,
+    url: row.URL,
+    sinopsis: row.Sinopsis,
+    autor: COALESCE(row.Autor, 'Sin autor')
+})
+MERGE (s:Seccion {nombre: row.Seccion})
+MERGE (a)-[:PERTENECE_A]->(s)
+",1,0,false
+DIAGRAMA GENERAL,,MATCH p=()-[:PERTENECE_A]->() RETURN p LIMIT 25;,2,0,false
+PREGUNTA1,,"MATCH (n:Articulo)-[:PERTENECE_A]->(s:Seccion)
+WHERE s.nombre = 'Entretenimiento'
+RETURN n.noticia AS Nombre_Articulo
+
+",3,0,false
+PREGUNTA2,,"MATCH p = shortestPath((n1:Articulo)-[:PERTENECE_A*]-(n2:Articulo))
+WHERE n1.noticia = 'Presentaciones para celebrar el Día Internacional de la Danza en Guadalajara' 
+  AND n2.noticia = 'Todos los estrenos de Netflix en abril de 2024'
+  AND (n1)-[:PERTENECE_A]->(:Seccion)<-[:PERTENECE_A]-(n2)
+RETURN length(p) AS Longitud
+",4,0,false
+PREGUNTA 3,,"MATCH (n)
+RETURN n, size([(n)-[]-() | 1]) AS Grado
+ORDER BY Grado DESC
+LIMIT 5
+
+",5,0,false
+PREGUNTA4,,"MATCH (n1)-[:PERTENECE_A]->(:Seccion {nombre: ""México""})
+RETURN COUNT(n1) AS TotalArticulos
+",6,0,false
+PRENTA 5,,"MATCH (a:Articulo)
+RETURN a
+ORDER BY a.fecha DESC
+LIMIT 5
+",7,0,false
